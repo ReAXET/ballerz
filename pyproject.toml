@@ -18,9 +18,11 @@ dependencies = [
     "pyarrow>=16.0.0",
     "scrapy>=2.11.1",
     "bs4>=0.0.2",
-    "tqdm>=4.66.2",
+    "tqdm>=4.66.4",
     "sportsdataverse>=0.0.38",
     "zstandard>=0.22.0",
+    "prisma>=0.13.1",
+    "pydantic[email]>=2.7.1",
 ]
 requires-python = ">=3.12"
 readme = "README.md"

@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("N_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-py"
+  interface = "sync"
+  recursive_type_depth = 5
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  hasSubscription Boolean @default(false)
+  role      Role     @default(USER)
+  subscription Subscription[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Sports {
+  id        Int      @id @default(autoincrement())
+  name      String
+  leagues   Leagues[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Leagues {
+  id        Int      @id @default(autoincrement())
+  name      String
+  sportId   Int
+  sport     Sports   @relation(fields: [sportId], references: [id])
+  teams     Teams[]
+  documents Document[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Teams {
+  id        Int      @id @default(autoincrement())
+  name      String
+  leagueId  Int
+  league    Leagues  @relation(fields: [leagueId], references: [id])
+  players   Players[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Players {
+  id        Int      @id @default(autoincrement())
+  name      String
+  teamId    Int
+  team      Teams    @relation(fields: [teamId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Document {
+  id        Int      @id @default(autoincrement())
+  name      String
+  content   String
+  file_type String
+  league  Leagues[]
+  url       String  @unique                                               
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
