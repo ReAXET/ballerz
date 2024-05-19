@@ -121,6 +121,32 @@ class DatabaseSettings:
 
         def encoder(bin_value: bytes) -> bytes:
             return b"\x01" + encode_json(bin_value)
+        
+        def decoder(bin_value: bytes) -> Any:
+            # the byte is the \x01 prefix for jsonb used in postgres
+            # asyncpg returns it when format='binary'
+            return decode_json(bin_value[1:])
+        
+        dbapi_connection.await_(
+            dbapi_connection.driver_connection.set_type_codec(
+                "jsonb",
+                encoder=encoder,
+                decoder=decoder,
+                schema="pg_catalog",
+                format="binary",
+            ),
+        )
+        dbapi_connection.await_(
+            dbapi_connection.driver_connection.set_type_codec(
+                "json",
+                encoder=encoder,
+                decoder=decoder,
+                schema="pg_catalog",
+                format="binary",
+            ),
+        )
+
+    
 
 
 
