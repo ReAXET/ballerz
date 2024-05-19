@@ -23,6 +23,15 @@ dependencies = [
     "zstandard>=0.22.0",
     "prisma>=0.13.1",
     "pydantic[email]>=2.7.1",
+    "psycopg2-binary>=2.9.9",
+    "loguru>=0.7.2",
+    "jupyterlab>=4.2.0",
+    "pyspark>=3.5.1",
+    "asyncpg>=0.29.0",
+    "sqlalchemy-cockroachdb>=2.0.2",
+    "litestar>=2.8.3",
+    "redis>=5.0.4",
+    "alembic>=1.13.1",
 ]
 requires-python = ">=3.12"
 readme = "README.md"

@@ -1,0 +1,20 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true,
+                    "ca": "",
+                    "cert": "/home/jbox/.postgresql/root.crt"
+                }
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "CockroachDB",
+            "name": "sport",
+            "connectString": "postgresql://sport_user:I-CFj0ThY3cCtZ8ZnZ2AOA@db-sports-13706.5xj.gcp-us-central1.cockroachlabs.cloud:26257/sports_db?sslmode=verify-full",
+            "connectionTimeout": 100
+        }
+    ],
+    "python.REPL.enableREPLSmartSend": false
+}

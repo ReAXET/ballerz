@@ -1,6 +1,6 @@
 import os
 from pydantic_core.core_schema import FieldValidationInfo
-from pydantic import PostgresDsn, EmailStr, AnyHttpUrl, field_validator
+from pydantic import PostgresDsn, EmailStr, AnyHttpUrl, field_validator, BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Any
 from enum import Enum
@@ -19,17 +19,20 @@ class ModeEnum(str, Enum):
 
 
 
-class Settings(BaseSettings):
+class Settings(BaseSettings, BaseModel):
     """
     Base settings class for the application configuration.  Utilizes pydantic_settings for
     configuration management.  This class is responsible for loading the configuration from
     the environment and validating the configuration values.
     """
+
     # Model Config for pydantic_settings
     model_config = SettingsConfigDict(
         case_sensitive=True,
         env_file=os.path.join(ROOT_DIR, ".env"),
         env_file_encoding="utf-8",
+        
+        
 
     )
 
@@ -64,6 +67,19 @@ class Settings(BaseSettings):
     NEON_PORT: int = 5432
     NEON_DATABASE_URI: PostgresDsn | str = ""
 
+    # Local Post                 gres Configuration
+    LOCAL_DB_NAME: str = os.getenv("LOCAL_DB_NAME", "")
+    LOCAL_DB_USERNAME: str = os.getenv("LOCAL_DB_USERNAME", "")
+    LOCAL_DB_PASSWORD: str = os.getenv("LOCAL_DB_PASSWORD", "")
+    LOCAL_DB_HOSTNAME: str = os.getenv("LOCAL_DB_HOSTNAME", "")
+    LOCAL_DB_PORT: int = 5432
+    LOCAL_DATABASE_URI: PostgresDsn | str = ""
+    DB_ECHO: bool = Field(default=False if MODE == ModeEnum.PROD else True, literal=True, description="Echo SQL queries to the console")
+
+    @classmethod
+    def from_mode(cls, mode: ModeEnum) -> Any:
+        return cls(mode=mode, DB_ECHO=mode in [ModeEnum.DEV, ModeEnum.TEST])
+
 
     # Redis Configuration
     REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
@@ -80,7 +96,11 @@ class Settings(BaseSettings):
     ENCRYPTION_KEY: str = secrets.token_urlsafe(32)
     ALGORITHM: str = "HS256"
 
+    # Timezone Configuration
+    TIMEZONE: str = "America/New_York"
 
+    # 
+    
 
 
     
@@ -89,4 +109,4 @@ class Settings(BaseSettings):
 
 
 
-settings = Settings()
+settings = Settings()                                                                                   

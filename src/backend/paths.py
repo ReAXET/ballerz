@@ -4,6 +4,7 @@ import os
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 
+PROJECT_MLB_DATA_DIR = '/home/jbox/Desktop/mlb' # Is a gigabyte of data in parquet files
 
 # Path to the data directory
 DATA_DIR = os.path.join(ROOT_DIR, 'data')

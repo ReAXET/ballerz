@@ -21,8 +21,3 @@ def db_connect_instance():
     return test_users
 
 
-
-if __name__ == "__main__":
-    db_connect_instance()
-
-
